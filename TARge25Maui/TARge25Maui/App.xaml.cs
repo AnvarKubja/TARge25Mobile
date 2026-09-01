@@ -11,7 +11,15 @@ namespace TARge25Maui
 
         protected override Window CreateWindow(IActivationState? activationState)
         {
-            return new Window(new AppShell());
+            //loome esimese lehe (StartPage)
+            var startPage = new StartPage();
+            //Pakime selle NavigationPage sisse, et saaksime kasutada navigeerimist
+            var navPage = new NavigationPage(startPage)
+            {
+                BarBackgroundColor = Colors.LightBlue,
+                BarTextColor = Colors.White
+            };
+            return new Window(navPage);
         }
     }
 }
