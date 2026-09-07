@@ -6,6 +6,18 @@
     xmlns:local="clr-namespace:TARge25Maui"
     Title="TARge25Maui">
 
+    <Shell.TitleView>
+        <Label
+            Text="Näidis"
+            FontFamily="Socafe"
+            FontSize="Title"
+            TextColor="DarkGoldenrod"
+            VerticalTextAlignment="Center"
+            HorizontalOptions="Start"
+            Padding="25,0,0,0"
+            HeightRequest="50"/>
+    </Shell.TitleView>
+
     <ShellContent
         Title="Avaleht"
         ContentTemplate="{DataTemplate local:StartPage}"
