@@ -49,7 +49,7 @@ public partial class FigurePage : ContentPage
         {
             WidthRequest = 200,
             HeightRequest = 200,
-            Fill = new SolidColorBrush(Color.FromRgb(b, g, r)), //kujundi värv brush'i abil
+            Fill = new SolidColorBrush(Color.FromRgb(b, g, r)), //kujundi värv
             Stroke = Colors.BurlyWood, //äärise värv
             StrokeThickness = 5, //äärise paksus
             HorizontalOptions = LayoutOptions.Center
@@ -65,7 +65,7 @@ public partial class FigurePage : ContentPage
         new Point(100, 0),  //keskel
         new Point(200, 200)  //parem all
     },
-            Fill = new SolidColorBrush(Color.FromRgb(g, b, r)), //kujundi värv brush'i abil
+            Fill = new SolidColorBrush(Color.FromRgb(g, b, r)), //kujundi värv
             Stroke = Colors.Aquamarine, //äärise värv
             StrokeThickness = 5, //äärise paksus
             HorizontalOptions = LayoutOptions.Center,
@@ -77,7 +77,12 @@ public partial class FigurePage : ContentPage
         kolmnurk.GestureRecognizers.Add(tap_kolmnurk);
         tap_kolmnurk.Tapped += (sender, e) =>
         {
-            // mõtle ise välja
+            kolmnurk.Scale += 0.2;
+
+            if (kolmnurk.Scale > 3.0)
+            {
+                kolmnurk.Scale = 1.0;
+            }
         };
 
         hsl = new HorizontalStackLayout { Spacing = 20, HorizontalOptions = LayoutOptions.Center };
@@ -87,7 +92,7 @@ public partial class FigurePage : ContentPage
             {
                 Text = nupud[j],
                 FontSize = 28,
-                FontFamily = "Luffio",
+                FontFamily = "Socafe",
                 TextColor = Colors.Chocolate,
                 BackgroundColor = Colors.Beige,
                 CornerRadius = 10,
@@ -123,5 +128,10 @@ public partial class FigurePage : ContentPage
         {
             Navigation.PushAsync(new FigurePage()); //siia lisame uue lehe, et saaks edasi liikuda
         }
+        else if (nupp.ZIndex == 3)
+        {
+            Navigation.PushAsync(new TimerPage());
+        }
+
     }
 }
