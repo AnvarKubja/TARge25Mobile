@@ -9,7 +9,7 @@
         VerticalOptions="Center"
         HorizontalOptions="Center">
 
-        <!-- Pealkiri -->
+        
         <Label x:Name="StatusLabel"
                Text="Vali valgus"
                FontSize="28"
