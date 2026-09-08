@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Valgusfoor.MainPage">
+
+    <VerticalStackLayout
+        Padding="30"
+        Spacing="10"
+        VerticalOptions="Center"
+        HorizontalOptions="Center">
+
+        <!-- Pealkiri -->
+        <Label x:Name="StatusLabel"
+               Text="Vali valgus"
+               FontSize="28"
+               FontAttributes="Bold"
+               HorizontalOptions="Center" />
+
+        <!-- Punane -->
+        <Ellipse x:Name="RedLight"
+                 Fill="Gray"
+                 WidthRequest="120"
+                 HeightRequest="120"
+                 Stroke="Black"
+                 StrokeThickness="5">
+            <Ellipse.GestureRecognizers>
+                <TapGestureRecognizer Tapped="RedLight_Tapped" />
+            </Ellipse.GestureRecognizers>
+        </Ellipse>
+
+        <!-- Kollane -->
+        <Ellipse x:Name="YellowLight"
+                 Fill="Gray"
+                 WidthRequest="120"
+                 HeightRequest="120"
+                 Stroke="Black"
+                 StrokeThickness="5">
+            <Ellipse.GestureRecognizers>
+                <TapGestureRecognizer Tapped="YellowLight_Tapped" />
+            </Ellipse.GestureRecognizers>
+        </Ellipse>
+
+        <!-- Roheline -->
+        <Ellipse x:Name="GreenLight"
+                 Fill="Gray"
+                 WidthRequest="120"
+                 HeightRequest="120"
+                 Stroke="Black"
+                 StrokeThickness="5">
+            <Ellipse.GestureRecognizers>
+                <TapGestureRecognizer Tapped="GreenLight_Tapped" />
+            </Ellipse.GestureRecognizers>
+        </Ellipse>
+
+        <HorizontalStackLayout
+            Padding="30"
+            Spacing="20"
+            HorizontalOptions="Center">
+
+            <Button Text="SISSE"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BackgroundColor="LightGreen"
+                    Clicked="ClickedOn"
+                    WidthRequest="120" />
+
+            <Button Text="VÄLJA"
+                    TextColor="Black"
+                    FontAttributes="Bold"
+                    BackgroundColor="IndianRed"
+                    Clicked="ClickedOff"
+                    WidthRequest="120" />
+
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+
+</ContentPage>
