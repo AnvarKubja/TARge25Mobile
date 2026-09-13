@@ -2,14 +2,15 @@
 
 public partial class MainPage : ContentPage
 {
-    bool lightOn = true;
+    bool lightOn = false;
 
     public MainPage()
     {
         InitializeComponent();
 
-        lightOn = true;
+        lightOn = false;
         TurnOff();
+        StatusLabel.Text = "Lülita esmalt foor sisse";
     }
 
     // SISSE
@@ -17,7 +18,9 @@ public partial class MainPage : ContentPage
     {
         lightOn = true;
 
-        TurnOff();
+        RedLight.Fill = Colors.Red;
+        YellowLight.Fill = Colors.Yellow;
+        GreenLight.Fill = Colors.Green;
 
         StatusLabel.Text = "Vali valgus";
     }
@@ -38,9 +41,6 @@ public partial class MainPage : ContentPage
         if (!lightOn)
             return;
 
-        TurnOff();
-
-        RedLight.Fill = Colors.Red;
         StatusLabel.Text = "Seisa";
     }
 
@@ -50,9 +50,6 @@ public partial class MainPage : ContentPage
         if (!lightOn)
             return;
 
-        TurnOff();
-
-        YellowLight.Fill = Colors.Yellow;
         StatusLabel.Text = "Valmista";
     }
 
@@ -62,12 +59,8 @@ public partial class MainPage : ContentPage
         if (!lightOn)
             return;
 
-        TurnOff();
-
-        GreenLight.Fill = Colors.Green;
         StatusLabel.Text = "Sõida";
     }
-
 
     private void TurnOff()
     {
