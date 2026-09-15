@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Tree.MainPage"
+    Title="Puu">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="25"
+            Spacing="20">
+
+            <Label
+                Text="🌳 Puu"
+                FontSize="32"
+                FontAttributes="Bold"
+                HorizontalOptions="Center" />
+
+            <!-- Kogu puu on ühe ühise Grid-i sees -->
+            <Grid
+                x:Name="Tree"
+                WidthRequest="250"
+                HeightRequest="320"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+
+                <!-- Tüvi -->
+                <BoxView
+                    x:Name="TreeTrunk"
+                    Color="SaddleBrown"
+                    WidthRequest="45"
+                    HeightRequest="180"
+                    HorizontalOptions="Center"
+                    VerticalOptions="End"
+                    Margin="0,0,0,20" />
+
+                <!-- Lehed -->
+                <Frame
+                    x:Name="TreeLeaves"
+                    BackgroundColor="ForestGreen"
+                    CornerRadius="100"
+                    WidthRequest="210"
+                    HeightRequest="210"
+                    Padding="0"
+                    HasShadow="True"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Start"
+                    Margin="0,15,0,0">
+
+                    <Label
+                        x:Name="Flowers"
+                        Text="🌸 🌸 🌸"
+                        FontSize="28"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        IsVisible="False"
+                        Opacity="0" />
+
+                </Frame>
+
+            </Grid>
+
+            <Label
+                x:Name="InfoLabel"
+                Text="Vali tegevus."
+                FontSize="20"
+                HorizontalTextAlignment="Center"
+                HorizontalOptions="Center" />
+
+            <Picker
+                x:Name="ActionPicker"
+                Title="Vali tegevus"
+                HorizontalOptions="Fill">
+
+                <Picker.Items>
+                    <x:String>Kasva</x:String>
+                    <x:String>Õitse</x:String>
+                    <x:String>Värise</x:String>
+                    <x:String>Langeta</x:String>
+                </Picker.Items>
+
+            </Picker>
+
+            <Label
+                Text="Tegevuse kiirus"
+                FontSize="16"
+                HorizontalOptions="Center" />
+
+            <Stepper
+                x:Name="SpeedStepper"
+                Minimum="500"
+                Maximum="5000"
+                Increment="500"
+                Value="1500"
+                HorizontalOptions="Center" />
+
+            <Label
+                Text="Kuupäev"
+                FontSize="16" />
+
+            <DatePicker
+                x:Name="VirtualDatePicker"
+                Date="{Binding Source={x:Reference VirtualDatePicker}, Path=Date}" />
+
+            <Label
+                Text="Kellaaeg"
+                FontSize="16" />
+
+            <TimePicker
+                x:Name="VirtualTimePicker"
+                Time="{Binding Source={x:Reference VirtualTimePicker}, Path=Time}" />
+
+            <Label
+                Text="Lehtede läbipaistvus"
+                FontSize="16" />
+
+            <Slider
+                Minimum="0"
+                Maximum="1"
+                Value="1"
+                ValueChanged="OnOpacityChanged" />
+
+            <Button
+                Text="Tee tegevus"
+                FontSize="20"
+                Clicked="OnActionClicked"
+                BackgroundColor="ForestGreen"
+                TextColor="White"
+                CornerRadius="12"
+                HeightRequest="55" />
+
+            <Button
+                Text="🔄 Lähtesta puu"
+                FontSize="20"
+                Clicked="OnResetClicked"
+                BackgroundColor="DarkOrange"
+                TextColor="White"
+                CornerRadius="12"
+                HeightRequest="55" />
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
