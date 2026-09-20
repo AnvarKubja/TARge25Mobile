@@ -1,144 +1,165 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Tree.MainPage"
-    Title="Puu">
+    Title="Puu"
+    BackgroundColor="#F3F5F2">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="25"
-            Spacing="20">
+        <VerticalStackLayout Padding="20" Spacing="12">
 
             <Label
-                Text="🌳 Puu"
-                FontSize="32"
+                Text="Puu hooajad ja elutsükkel"
+                FontSize="24"
                 FontAttributes="Bold"
+                TextColor="#2E4A2B"
                 HorizontalOptions="Center" />
 
-            <!-- Kogu puu on ühe ühise Grid-i sees -->
-            <Grid
-                x:Name="Tree"
-                WidthRequest="250"
-                HeightRequest="320"
-                HorizontalOptions="Center"
-                VerticalOptions="Center">
+            <AbsoluteLayout HeightRequest="360">
 
-                <!-- Tüvi -->
                 <BoxView
-                    x:Name="TreeTrunk"
-                    Color="SaddleBrown"
-                    WidthRequest="45"
-                    HeightRequest="180"
-                    HorizontalOptions="Center"
-                    VerticalOptions="End"
-                    Margin="0,0,0,20" />
+                    x:Name="Sky"
+                    Color="#7FC4EF"
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All" />
 
-                <!-- Lehed -->
-                <Frame
-                    x:Name="TreeLeaves"
-                    BackgroundColor="ForestGreen"
-                    CornerRadius="100"
-                    WidthRequest="210"
-                    HeightRequest="210"
-                    Padding="0"
-                    HasShadow="True"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Start"
-                    Margin="0,15,0,0">
+                <BoxView
+                    x:Name="Sun"
+                    Color="#FFD34D"
+                    CornerRadius="22"
+                    AbsoluteLayout.LayoutBounds="0.85, 0.08, 44, 44"
+                    AbsoluteLayout.LayoutFlags="PositionProportional" />
 
-                    <Label
+                <BoxView
+                    x:Name="Ground"
+                    Color="#5AA24B"
+                    AbsoluteLayout.LayoutBounds="0, 1, 1, 0.2"
+                    AbsoluteLayout.LayoutFlags="All" />
+
+                <AbsoluteLayout
+                    x:Name="TreeRoot"
+                    AbsoluteLayout.LayoutBounds="0.5, 0.95, 220, 280"
+                    AbsoluteLayout.LayoutFlags="PositionProportional">
+
+                    <BoxView
+                        x:Name="Trunk"
+                        Color="#6B4423"
+                        AbsoluteLayout.LayoutBounds="93, 140, 34, 140" />
+
+                    <Border
+                        x:Name="CrownLeft"
+                        BackgroundColor="#3AA54B"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 50"
+                        AbsoluteLayout.LayoutBounds="10, 70, 100, 100" />
+
+                    <Border
+                        x:Name="CrownRight"
+                        BackgroundColor="#3AA54B"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 50"
+                        AbsoluteLayout.LayoutBounds="110, 70, 100, 100" />
+
+                    <Border
+                        x:Name="CrownMain"
+                        BackgroundColor="#3AA54B"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 70"
+                        AbsoluteLayout.LayoutBounds="40, 10, 140, 140" />
+
+                    <AbsoluteLayout
                         x:Name="Flowers"
-                        Text="🌸 🌸 🌸"
-                        FontSize="28"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
                         IsVisible="False"
-                        Opacity="0" />
+                        AbsoluteLayout.LayoutBounds="30, 30, 160, 130">
 
-                </Frame>
+                        <Border BackgroundColor="White" Stroke="Transparent"
+                                StrokeShape="RoundRectangle 8"
+                                AbsoluteLayout.LayoutBounds="15, 25, 16, 16" />
+                        <Border BackgroundColor="White" Stroke="Transparent"
+                                StrokeShape="RoundRectangle 8"
+                                AbsoluteLayout.LayoutBounds="60, 5, 16, 16" />
+                        <Border BackgroundColor="White" Stroke="Transparent"
+                                StrokeShape="RoundRectangle 8"
+                                AbsoluteLayout.LayoutBounds="110, 30, 16, 16" />
+                        <Border BackgroundColor="White" Stroke="Transparent"
+                                StrokeShape="RoundRectangle 8"
+                                AbsoluteLayout.LayoutBounds="40, 75, 16, 16" />
+                        <Border BackgroundColor="White" Stroke="Transparent"
+                                StrokeShape="RoundRectangle 8"
+                                AbsoluteLayout.LayoutBounds="90, 90, 16, 16" />
 
-            </Grid>
+                    </AbsoluteLayout>
+
+                </AbsoluteLayout>
+
+                <Label
+                    x:Name="SeasonLabel"
+                    Text="Aastaaeg"
+                    FontSize="14"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    AbsoluteLayout.LayoutBounds="12, 12, 150, 24" />
+
+            </AbsoluteLayout>
+
 
             <Label
                 x:Name="InfoLabel"
-                Text="Vali tegevus."
-                FontSize="20"
-                HorizontalTextAlignment="Center"
-                HorizontalOptions="Center" />
+                Text="Vali tegevus ja vajuta nuppu."
+                FontSize="17"
+                TextColor="#2E4A2B"
+                HorizontalTextAlignment="Center" />
 
-            <Picker
-                x:Name="ActionPicker"
-                Title="Vali tegevus"
-                HorizontalOptions="Fill">
-
+            <Picker x:Name="ActionPicker" Title="Vali tegevus" SelectedIndex="0">
                 <Picker.Items>
                     <x:String>Kasva</x:String>
                     <x:String>Õitse</x:String>
                     <x:String>Värise</x:String>
                     <x:String>Langeta</x:String>
                 </Picker.Items>
-
             </Picker>
 
-            <Label
-                Text="Tegevuse kiirus"
-                FontSize="16"
-                HorizontalOptions="Center" />
+            <Button
+                Text="Käivita"
+                Clicked="OnActionClicked"
+                BackgroundColor="#2F8F3E"
+                TextColor="White"
+                CornerRadius="12"
+                HeightRequest="50" />
+
+            <Label x:Name="SpeedValueLabel" Text="Animatsiooni kestus: 1500 ms" />
 
             <Stepper
                 x:Name="SpeedStepper"
                 Minimum="500"
-                Maximum="5000"
-                Increment="500"
+                Maximum="2000"
+                Increment="250"
                 Value="1500"
-                HorizontalOptions="Center" />
+                ValueChanged="OnSpeedChanged" />
 
-            <Label
-                Text="Kuupäev"
-                FontSize="16" />
-
-            <DatePicker
-                x:Name="VirtualDatePicker"
-                Date="{Binding Source={x:Reference VirtualDatePicker}, Path=Date}" />
-
-            <Label
-                Text="Kellaaeg"
-                FontSize="16" />
-
-            <TimePicker
-                x:Name="VirtualTimePicker"
-                Time="{Binding Source={x:Reference VirtualTimePicker}, Path=Time}" />
-
-            <Label
-                Text="Lehtede läbipaistvus"
-                FontSize="16" />
+            <Label x:Name="OpacityValueLabel" Text="Lehestiku läbipaistvus: 100%" />
 
             <Slider
+                x:Name="OpacitySlider"
                 Minimum="0"
                 Maximum="1"
                 Value="1"
                 ValueChanged="OnOpacityChanged" />
 
-            <Button
-                Text="Tee tegevus"
-                FontSize="20"
-                Clicked="OnActionClicked"
-                BackgroundColor="ForestGreen"
-                TextColor="White"
-                CornerRadius="12"
-                HeightRequest="55" />
+            <Label Text="Virtuaalne kuupäev" />
+            <DatePicker x:Name="VirtualDatePicker" Format="dd.MM.yyyy" />
+
+            <Label Text="Virtuaalne kellaaeg" />
+            <TimePicker x:Name="VirtualTimePicker" Format="HH:mm" />
 
             <Button
-                Text="🔄 Lähtesta puu"
-                FontSize="20"
+                Text="Lähtesta puu"
                 Clicked="OnResetClicked"
-                BackgroundColor="DarkOrange"
+                BackgroundColor="#C9751E"
                 TextColor="White"
                 CornerRadius="12"
-                HeightRequest="55" />
-
+                HeightRequest="50" />
 
         </VerticalStackLayout>
     </ScrollView>

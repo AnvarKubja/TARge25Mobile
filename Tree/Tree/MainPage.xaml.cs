@@ -1,170 +1,182 @@
-﻿namespace Tree;
+namespace Tree;
 
 public partial class MainPage : ContentPage
 {
+    // Puu praegune suurus (1.0 = algsuurus)
+    private double suurus = 1.0;
+
     public MainPage()
     {
         InitializeComponent();
 
-        // Kogu puu pöörleb alumise keskpunkti ümber
-        Tree.AnchorX = 0.5;
-        Tree.AnchorY = 1.0;
+        TreeRoot.AnchorX = 0.5;
+        TreeRoot.AnchorY = 1.0;
+
+        // Virtuaalne aeg algab tänasest
+        VirtualDatePicker.Date = DateTime.Today;
+        VirtualTimePicker.Time = DateTime.Now.TimeOfDay;
+
+        UuendaMaastikku();
     }
 
     private async void OnActionClicked(object sender, EventArgs e)
     {
-        var picker = this.FindByName<Picker>("ActionPicker");
-        var info = this.FindByName<Label>("InfoLabel");
-        var stepper = this.FindByName<Stepper>("SpeedStepper");
+        // Maastik uueneb vastavalt valitud kuupäevale ja kellaajale
+        UuendaMaastikku();
 
-        if (picker.SelectedIndex == -1)
+        string tegevus = ActionPicker.SelectedItem as string ?? "";
+        uint kestus = (uint)SpeedStepper.Value;
+
+        if (tegevus == "Kasva")
         {
-            info.Text = "⚠️ Palun vali tegevus!";
+            InfoLabel.Text = "Puu kasvab!";
+
+            suurus = suurus + 0.1;
+            await TreeRoot.ScaleTo(suurus, kestus);
+        }
+        else if (tegevus == "Õitse")
+        {
+            InfoLabel.Text = "Puu õitseb!";
+
+            // Lehestik muutub roosaks ja õied tulevad nähtavale
+            MuudaLehtedeVarv(Color.FromArgb("#E27DA8"));
+
+            Flowers.Opacity = 0;
+            Flowers.IsVisible = true;
+            await Flowers.FadeTo(1, kestus);
+        }
+        else if (tegevus == "Värise")
+        {
+            InfoLabel.Text = "Puu väriseb tuules!";
+
+            await TreeRoot.TranslateTo(-20, 0, kestus / 4);
+            await TreeRoot.TranslateTo(20, 0, kestus / 4);
+            await TreeRoot.TranslateTo(-10, 0, kestus / 4);
+            await TreeRoot.TranslateTo(0, 0, kestus / 4);
+
+            InfoLabel.Text = "Tuul vaibus.";
+        }
+        else if (tegevus == "Langeta")
+        {
+            await LangetaPuu(kestus);
+        }
+        else
+        {
+            InfoLabel.Text = "Vali kõigepealt tegevus!";
+        }
+    }
+
+    // Puu langetamine
+    private async Task LangetaPuu(uint kestus)
+    {
+        int kuu = VirtualDatePicker.Date?.Month ?? 1;
+        TimeSpan kellaaeg = VirtualTimePicker.Time ?? TimeSpan.Zero;
+
+        bool onTalv = kuu == 12 || kuu == 1 || kuu == 2;
+        bool onValge = kellaaeg.Hours >= 8 && kellaaeg.Hours < 17;
+
+        if (!onTalv || !onValge)
+        {
+            InfoLabel.Text = "Pimedas ja suvel puid ei langetata!";
             return;
         }
 
-        string action = picker.SelectedItem?.ToString() ?? "";
-        int speed = (int)stepper.Value;
+        InfoLabel.Text = "Puu langetatakse!";
 
-        switch (action)
-        {
-            case "Kasva":
-                await GrowTree(speed);
-                break;
+        // Puu nihkub servale ja kukub siis külili
+        await TreeRoot.TranslateTo(-80, 0, kestus / 2);
+        await TreeRoot.RotateTo(90, kestus);
 
-            case "Õitse":
-                await BloomTree(speed);
-                break;
-
-            case "Värise":
-                await ShakeTree(speed);
-                break;
-
-            case "Langeta":
-                await CutDownTree(speed);
-                break;
-        }
+        InfoLabel.Text = "Puu on langetatud.";
     }
 
-    private async Task GrowTree(int speed)
-    {
-        var info = this.FindByName<Label>("InfoLabel");
-
-        info.Text = "🌱 Puu kasvab!";
-
-        await Tree.ScaleTo(1.3, (uint)speed);
-
-        info.Text = "🌳 Puu on suuremaks kasvanud!";
-    }
-
-    private async Task BloomTree(int speed)
-    {
-        var leaves = this.FindByName<Frame>("TreeLeaves");
-        var flowers = this.FindByName<Label>("Flowers");
-        var info = this.FindByName<Label>("InfoLabel");
-
-        info.Text = "🌸 Puu õitseb!";
-
-        leaves.BackgroundColor = Colors.HotPink;
-
-        flowers.Opacity = 0;
-        flowers.IsVisible = true;
-
-        await flowers.FadeTo(1, (uint)speed);
-
-        info.Text = "🌸 Puu õitseb!";
-    }
-
-    private async Task ShakeTree(int speed)
-    {
-        var info = this.FindByName<Label>("InfoLabel");
-
-        info.Text = "💨 Puu väriseb tuules!";
-
-        await Tree.TranslateTo(-20, 0, (uint)(speed / 4));
-        await Tree.TranslateTo(20, 0, (uint)(speed / 2));
-        await Tree.TranslateTo(-15, 0, (uint)(speed / 2));
-        await Tree.TranslateTo(15, 0, (uint)(speed / 2));
-        await Tree.TranslateTo(0, 0, (uint)(speed / 4));
-
-        info.Text = "🍃 Tuul vaibus.";
-    }
-
-    private async Task CutDownTree(int speed)
-    {
-        var datePicker = this.FindByName<DatePicker>("VirtualDatePicker");
-        var timePicker = this.FindByName<TimePicker>("VirtualTimePicker");
-        var info = this.FindByName<Label>("InfoLabel");
-
-        // Kontrollime kuud
-        int month = datePicker.Date?.Month ?? DateTime.Now.Month;
-
-        bool isWinter =
-            month == 12 ||
-            month == 1 ||
-            month == 2;
-
-        // Kontrollime kellaaega
-        TimeSpan selectedTime =
-            timePicker.Time ?? TimeSpan.Zero;
-
-        bool isDaytime =
-            selectedTime >= new TimeSpan(8, 0, 0) &&
-            selectedTime <= new TimeSpan(17, 0, 0);
-
-        if (!isWinter || !isDaytime)
-        {
-            info.Text =
-                "❌ Puud ei tohi praegu langetada! " +
-                "Langetada võib ainult talvel ja valgel ajal (08:00–17:00).";
-
-            return;
-        }
-
-        info.Text = "🪓 Puu langetatakse!";
-
-        // Kogu puu kukub korraga:
-        // tüvi + lehed + lilled
-        Tree.AnchorX = 0.5;
-        Tree.AnchorY = 1.0;
-
-        await Tree.RotateTo(90, (uint)speed);
-
-        info.Text = "🪵 Puu on langetatud.";
-    }
-
-    private void OnOpacityChanged(object sender, ValueChangedEventArgs e)
-    {
-        var leaves = this.FindByName<Frame>("TreeLeaves");
-
-        if (leaves != null)
-        {
-            leaves.Opacity = e.NewValue;
-        }
-    }
 
     private async void OnResetClicked(object sender, EventArgs e)
     {
-        var leaves = this.FindByName<Frame>("TreeLeaves");
-        var flowers = this.FindByName<Label>("Flowers");
-        var info = this.FindByName<Label>("InfoLabel");
+        await TreeRoot.RotateTo(0, 500);
+        await TreeRoot.ScaleTo(1, 500);
+        await TreeRoot.TranslateTo(0, 0, 500);
 
-        // Tagasi algasendisse
-        await Task.WhenAll(
-            Tree.RotateTo(0, 500),
-            Tree.ScaleTo(1.0, 500),
-            Tree.TranslateTo(0, 0, 500)
-        );
+        suurus = 1.0;
 
-        // Taastame lehtede algse välimuse
-        leaves.BackgroundColor = Colors.ForestGreen;
-        leaves.Opacity = 1;
+        Flowers.IsVisible = false;
+        OpacitySlider.Value = 1;
 
-        // Peidame õied
-        flowers.Opacity = 0;
-        flowers.IsVisible = false;
-
-        info.Text = "🌳 Puu on algasendis.";
+        UuendaMaastikku();
+        InfoLabel.Text = "Puu on algasendis.";
     }
 
+    // Slider muudab lehestiku läbipaistvust
+    private void OnOpacityChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (CrownMain == null)
+            return;
+
+        CrownMain.Opacity = e.NewValue;
+        CrownLeft.Opacity = e.NewValue;
+        CrownRight.Opacity = e.NewValue;
+
+        OpacityValueLabel.Text = "Lehestiku läbipaistvus: " + (int)(e.NewValue * 100) + "%";
+    }
+
+    // Stepper muudab animatsiooni kestust
+    private void OnSpeedChanged(object sender, ValueChangedEventArgs e)
+    {
+        if (SpeedValueLabel == null)
+            return;
+
+        SpeedValueLabel.Text = "Animatsiooni kestus: " + (int)e.NewValue + " ms";
+    }
+
+
+    // Muudab taeva, maapinna ja lehtede värvi kuupäeva ja kellaaja järgi
+    private void UuendaMaastikku()
+    {
+        int kuu = VirtualDatePicker.Date?.Month ?? 1;
+        TimeSpan kellaaeg = VirtualTimePicker.Time ?? TimeSpan.Zero;
+
+        // Päev või öö
+        bool onPaev = kellaaeg.Hours >= 6 && kellaaeg.Hours < 20;
+
+        if (onPaev)
+            Sky.Color = Color.FromArgb("#7FC4EF");
+        else
+            Sky.Color = Color.FromArgb("#1B2A4A");
+
+        Sun.IsVisible = onPaev;
+
+        // Aastaaeg
+        if (kuu == 12 || kuu == 1 || kuu == 2)
+        {
+            SeasonLabel.Text = "Talv";
+            Ground.Color = Color.FromArgb("#E4EDF3");
+            MuudaLehtedeVarv(Color.FromArgb("#8A6A4B"));
+        }
+        else if (kuu >= 3 && kuu <= 5)
+        {
+            SeasonLabel.Text = "Kevad";
+            Ground.Color = Color.FromArgb("#63B04F");
+            MuudaLehtedeVarv(Color.FromArgb("#7FCB63"));
+        }
+        else if (kuu >= 6 && kuu <= 8)
+        {
+            SeasonLabel.Text = "Suvi";
+            Ground.Color = Color.FromArgb("#4E9A41");
+            MuudaLehtedeVarv(Color.FromArgb("#3AA54B"));
+        }
+        else
+        {
+            SeasonLabel.Text = "Sügis";
+            Ground.Color = Color.FromArgb("#9A8443");
+            MuudaLehtedeVarv(Color.FromArgb("#D4802A"));
+        }
+    }
+
+    // Annab kõigile kolmele lehekerale sama värvi
+    private void MuudaLehtedeVarv(Color varv)
+    {
+        CrownMain.BackgroundColor = varv;
+        CrownLeft.BackgroundColor = varv;
+        CrownRight.BackgroundColor = varv;
+    }
 }
