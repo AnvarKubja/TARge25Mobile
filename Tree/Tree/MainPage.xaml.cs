@@ -1,8 +1,9 @@
+using System.ComponentModel;
+
 namespace Tree;
 
 public partial class MainPage : ContentPage
 {
-    // Puu praegune suurus (1.0 = algsuurus)
     private double suurus = 1.0;
 
     public MainPage()
@@ -17,6 +18,21 @@ public partial class MainPage : ContentPage
         VirtualTimePicker.Time = DateTime.Now.TimeOfDay;
 
         UuendaMaastikku();
+    }
+
+    // Uuendab maastikku vastavalt kuupäevale
+    private void OnVirtualDateSelected(object sender, DateChangedEventArgs e)
+    {
+        UuendaMaastikku();
+    }
+
+    // Uuendab maastikku kohe vastavalt kellaajale
+    private void OnVirtualTimeChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "Time")
+        {
+            UuendaMaastikku();
+        }
     }
 
     private async void OnActionClicked(object sender, EventArgs e)
@@ -47,7 +63,7 @@ public partial class MainPage : ContentPage
         }
         else if (tegevus == "Värise")
         {
-            InfoLabel.Text = "Puu väriseb tuules!";
+            InfoLabel.Text = "Puu väriseb!";
 
             await TreeRoot.TranslateTo(-20, 0, kestus / 4);
             await TreeRoot.TranslateTo(20, 0, kestus / 4);
@@ -132,6 +148,9 @@ public partial class MainPage : ContentPage
     // Muudab taeva, maapinna ja lehtede värvi kuupäeva ja kellaaja järgi
     private void UuendaMaastikku()
     {
+        if (VirtualDatePicker == null || VirtualTimePicker == null)
+            return;
+
         int kuu = VirtualDatePicker.Date?.Month ?? 1;
         TimeSpan kellaaeg = VirtualTimePicker.Time ?? TimeSpan.Zero;
 
@@ -145,36 +164,42 @@ public partial class MainPage : ContentPage
 
         Sun.IsVisible = onPaev;
 
+        // Puu õitseb
+        bool kasOitseb = Flowers != null && Flowers.IsVisible && Flowers.Opacity > 0;
+
         // Aastaaeg
         if (kuu == 12 || kuu == 1 || kuu == 2)
         {
             SeasonLabel.Text = "Talv";
             Ground.Color = Color.FromArgb("#E4EDF3");
-            MuudaLehtedeVarv(Color.FromArgb("#8A6A4B"));
+            if (!kasOitseb) MuudaLehtedeVarv(Color.FromArgb("#8A6A4B"));
         }
         else if (kuu >= 3 && kuu <= 5)
         {
             SeasonLabel.Text = "Kevad";
             Ground.Color = Color.FromArgb("#63B04F");
-            MuudaLehtedeVarv(Color.FromArgb("#7FCB63"));
+            if (!kasOitseb) MuudaLehtedeVarv(Color.FromArgb("#7FCB63"));
         }
         else if (kuu >= 6 && kuu <= 8)
         {
             SeasonLabel.Text = "Suvi";
             Ground.Color = Color.FromArgb("#4E9A41");
-            MuudaLehtedeVarv(Color.FromArgb("#3AA54B"));
+            if (!kasOitseb) MuudaLehtedeVarv(Color.FromArgb("#3AA54B"));
         }
         else
         {
             SeasonLabel.Text = "Sügis";
             Ground.Color = Color.FromArgb("#9A8443");
-            MuudaLehtedeVarv(Color.FromArgb("#D4802A"));
+            if (!kasOitseb) MuudaLehtedeVarv(Color.FromArgb("#D4802A"));
         }
     }
 
     // Annab kõigile kolmele lehekerale sama värvi
     private void MuudaLehtedeVarv(Color varv)
     {
+        if (CrownMain == null || CrownLeft == null || CrownRight == null)
+            return;
+
         CrownMain.BackgroundColor = varv;
         CrownLeft.BackgroundColor = varv;
         CrownRight.BackgroundColor = varv;

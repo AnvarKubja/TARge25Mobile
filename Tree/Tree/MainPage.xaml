@@ -123,9 +123,9 @@
             <Button
                 Text="Käivita"
                 Clicked="OnActionClicked"
-                BackgroundColor="#2F8F3E"
+                BackgroundColor="DarkGreen"
                 TextColor="White"
-                CornerRadius="12"
+                CornerRadius="1"
                 HeightRequest="50" />
 
             <Label x:Name="SpeedValueLabel" Text="Animatsiooni kestus: 1500 ms" />
@@ -148,17 +148,23 @@
                 ValueChanged="OnOpacityChanged" />
 
             <Label Text="Virtuaalne kuupäev" />
-            <DatePicker x:Name="VirtualDatePicker" Format="dd.MM.yyyy" />
+            <DatePicker 
+                x:Name="VirtualDatePicker" 
+                Format="dd.MM.yyyy" 
+                DateSelected="OnVirtualDateSelected" />
 
             <Label Text="Virtuaalne kellaaeg" />
-            <TimePicker x:Name="VirtualTimePicker" Format="HH:mm" />
+            <TimePicker 
+                x:Name="VirtualTimePicker" 
+                Format="HH:mm" 
+                PropertyChanged="OnVirtualTimeChanged" />
 
             <Button
                 Text="Lähtesta puu"
                 Clicked="OnResetClicked"
-                BackgroundColor="#C9751E"
+                BackgroundColor="DarkRed"
                 TextColor="White"
-                CornerRadius="12"
+                CornerRadius="1"
                 HeightRequest="50" />
 
         </VerticalStackLayout>
