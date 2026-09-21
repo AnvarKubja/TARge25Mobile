@@ -13,7 +13,7 @@ public partial class StartPage : ContentPage
         new DateTimePage(),
         new StepperSliderPage(),
         new RgbPage(),
-        new TreePage()
+        new Pop_Up_Page()
     };
 
     public List<string> Lehenimed = new List<string>()
@@ -24,7 +24,7 @@ public partial class StartPage : ContentPage
         "Kuupäev",
         "Slaider",
         "RGB",
-        "Puu"
+        "PopUp"
     };
 
     public StartPage()
