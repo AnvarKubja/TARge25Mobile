@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TickTackToe.MainPage"
+             Title="Trips-Traps-Trull">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15" HorizontalOptions="Center">
+
+            <!-- Info ja Statistika -->
+            <Label x:Name="StatusLabel" Text="Mängija X käik" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label x:Name="StatsLabel" Text="Võidud - X: 0 | O: 0 | Viigid: 0" FontSize="14" HorizontalOptions="Center" TextColor="Gray" />
+
+            <!-- Mänguväli (Täidetakse koodist) -->
+            <Grid x:Name="GameGrid" 
+                  HeightRequest="400" 
+                  WidthRequest="400" 
+                  BackgroundColor="Black" 
+                  ColumnSpacing="5" 
+                  RowSpacing="5" 
+                  Padding="5">
+            </Grid>
+
+            <!-- Juhtnupud -->
+            <HorizontalStackLayout Spacing="5" HorizontalOptions="Center">
+                <Button Text="Uus mäng" Clicked="OnNewGameClicked" BackgroundColor="Green" TextColor="White" />
+                <Button Text="Kes alustab?" Clicked="OnWhoStartsClicked" BackgroundColor="Orange" TextColor="Black" />
+                <Button Text="Vaata reegleid" Clicked="OnRulesClicked" HorizontalOptions="Center" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

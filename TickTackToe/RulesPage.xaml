@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TickTackToe.RulesPage"
+             Title="Mängu reeglid">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Kuidas mängida Trips-Traps-Trulli?" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+        <Label Text="1. Mängitakse 3x3 ruudustikul." FontSize="16" />
+        <Label Text="2. Mängijad kordamööda asetavad oma sümboli (X või O) tühja ruutu." FontSize="16" />
+        <Label Text="3. Võidab see mängija, kes saab esimesena kolm oma sümbolit ritta (horisontaalselt, vertikaalselt või diagonaalselt)." FontSize="16" />
+        <Label Text="4. Kui kõik 9 ruutu on täis ja keegi pole rida saanud, on mäng viigis." FontSize="16" />
+
+        <Button Text="Tagasi mängima" Clicked="OnBackClicked" Margin="0,30,0,0" BackgroundColor="Gray" TextColor="White" />
+    </VerticalStackLayout>
+</ContentPage>
