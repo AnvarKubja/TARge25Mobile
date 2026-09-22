@@ -13,7 +13,8 @@ public partial class StartPage : ContentPage
         new DateTimePage(),
         new StepperSliderPage(),
         new RgbPage(),
-        new Pop_Up_Page()
+        new Pop_Up_Page(),
+        new GridPage()
     };
 
     public List<string> Lehenimed = new List<string>()
@@ -24,7 +25,8 @@ public partial class StartPage : ContentPage
         "Kuupäev",
         "Slaider",
         "RGB",
-        "PopUp"
+        "PopUp",
+        "Grid"
     };
 
     public StartPage()
@@ -58,11 +60,61 @@ public partial class StartPage : ContentPage
             };
         }
 
+        // Loome punase testnupu
+        Button nulliNupp = new Button
+        {
+            Text = "Nulli seaded (Testimiseks)",
+            BackgroundColor = Colors.Red,
+            TextColor = Colors.White,
+            CornerRadius = 10,
+            HeightRequest = 50,
+            Margin = new Thickness(0, 30, 0, 0) // Jätame veidi tühja ruumi üles
+        };
+
+        // Mis juhtub nupule vajutades?
+        nulliNupp.Clicked += async (sender, e) =>
+        {
+            // Kustutame seadne mälust meie spetsiifilise võtme
+            Preferences.Default.Remove("EsimeneKäivitamine");
+
+            // Anname tagasisidet, et nullimine õnnestus
+            await DisplayAlertAsync("Edukalt nullitud", "Mälu on tühjendatud. Kui sa lehe uuesti avad, käitub äpp nagu täiesti uus!", "OK");
+        };
+
+        // Ärge unustage nuppu oma Layouti (nt vst või stackLayout) lisada!
+        vst.Add(nulliNupp);
+        sv = new ScrollView { Content = vst };
+        Content = sv;
+
         sv = new ScrollView
         {
             Content = vst
         };
 
         Content = sv;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        bool onEsimeneStart = Preferences.Default.Get("EsimeneKäivitamine", true);
+
+        if (onEsimeneStart)
+        {
+            bool vastus = await DisplayAlertAsync("Tere tulemast!",
+                "Tundub, et avasid selle rakenduse esimest korda. Kas soovid näha lühikest juhendit?",
+                "Jah, palun",
+                "Ei, saan ise hakkama");
+            
+            if (vastus)
+            {
+                await DisplayAlertAsync("Juhend",
+                    "Siin on lühike juhend: vali menüüst sovib teema ja uuri, kuidas elemendid töötavad!",
+                    "Selge");
+            }
+
+            Preferences.Default.Set("EsimeneKäivitamine", false);
+        }
     }
 }
