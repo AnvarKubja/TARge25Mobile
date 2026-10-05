@@ -14,7 +14,8 @@ public partial class StartPage : ContentPage
         new StepperSliderPage(),
         new RgbPage(),
         new Pop_Up_Page(),
-        new GridPage()
+        new GridPage(),
+        new KarussellPage()
     };
 
     public List<string> Lehenimed = new List<string>()
@@ -26,7 +27,8 @@ public partial class StartPage : ContentPage
         "Slaider",
         "RGB",
         "PopUp",
-        "Grid"
+        "Grid",
+        "Karusell"
     };
 
     public StartPage()
