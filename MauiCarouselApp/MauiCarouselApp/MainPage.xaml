@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MauiCarouselApp"
+             xmlns:lang="clr-namespace:MauiCarouselApp.Resources.Languages"
+             x:Class="MauiCarouselApp.MainPage"
+             Title="Portfolio">
+
+    <!-- Lisapunktid: Ilus gradient-taust kogu lehele -->
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#2B1055" Offset="0.0" />
+            <GradientStop Color="#7597DE" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto, *, Auto" Padding="20">
+
+        <!-- Keele vahetamise nupud päises -->
+        <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End" Spacing="10" Margin="0,0,0,10">
+            <Button Text="EE" Clicked="ChangeLanguageToEt" BackgroundColor="#33FFFFFF" TextColor="White" CornerRadius="20"/>
+            <Button Text="EN" Clicked="ChangeLanguageToEn" BackgroundColor="#33FFFFFF" TextColor="White" CornerRadius="20"/>
+        </HorizontalStackLayout>
+
+        <!-- CarouselView galeriiks -->
+        <CarouselView Grid.Row="1" 
+                      ItemsSource="{Binding Languages}" 
+                      CurrentItem="{Binding CurrentLanguage}"
+                      IndicatorView="indicatorView"
+                      PeekAreaInsets="20">
+            <CarouselView.ItemTemplate>
+                <DataTemplate x:DataType="local:LanguageItem">
+                    <ContentView Padding="10">
+                        <!-- Kaardi disain koos klikitavusega -->
+                        <Border StrokeShape="RoundRectangle 20" 
+                                BackgroundColor="#CCFFFFFF" 
+                                StrokeThickness="0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="{Binding .}"/>
+                            </Border.GestureRecognizers>
+
+                            <VerticalStackLayout Padding="20" VerticalOptions="Center" HorizontalOptions="Center" Spacing="15">
+                                <Image Source="{Binding ImageUrl}" 
+                                       HeightRequest="150" 
+                                       WidthRequest="150" 
+                                       Aspect="AspectFit"/>
+
+                                <Label Text="{Binding Name}" 
+                                       FontSize="28" 
+                                       FontAttributes="Bold" 
+                                       HorizontalOptions="Center" 
+                                       TextColor="#2B1055"/>
+
+                                <Label Text="{Binding LocalizedDescription}" 
+                                       FontSize="16" 
+                                       HorizontalOptions="Center" 
+                                       HorizontalTextAlignment="Center"
+                                       TextColor="#555555"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </ContentView>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+
+        <!-- IndicatorView lehe allosas -->
+        <IndicatorView Grid.Row="2" 
+                       x:Name="indicatorView" 
+                       HorizontalOptions="Center" 
+                       Margin="0,15,0,0"
+                       IndicatorColor="LightGray" 
+                       SelectedIndicatorColor="White" />
+    </Grid>
+</ContentPage>

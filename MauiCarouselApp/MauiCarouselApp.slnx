@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="MauiCarouselApp/MauiCarouselApp.csproj">
+    <Deploy />
+  </Project>
+</Solution>
