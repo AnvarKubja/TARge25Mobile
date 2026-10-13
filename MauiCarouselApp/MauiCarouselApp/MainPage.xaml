@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:MauiCarouselApp"
              xmlns:lang="clr-namespace:MauiCarouselApp.Resources.Languages"
              x:Class="MauiCarouselApp.MainPage"
-             Title="Portfolio">
+             Title="Carousel">
 
     <!-- Lisapunktid: Ilus gradient-taust kogu lehele -->
     <ContentPage.Background>
