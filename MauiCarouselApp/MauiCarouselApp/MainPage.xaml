@@ -6,17 +6,16 @@
              x:Class="MauiCarouselApp.MainPage"
              Title="Carousel">
 
-    <!-- Lisapunktid: Ilus gradient-taust kogu lehele -->
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#2B1055" Offset="0.0" />
-            <GradientStop Color="#7597DE" Offset="1.0" />
+            <GradientStop Color="Green" Offset="0.0" />
+            <GradientStop Color="LawnGreen" Offset="1.0" />
         </LinearGradientBrush>
     </ContentPage.Background>
 
     <Grid RowDefinitions="Auto, *, Auto" Padding="20">
 
-        <!-- Keele vahetamise nupud päises -->
+        <!-- Keele vahetamise nupud-->
         <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End" Spacing="10" Margin="0,0,0,10">
             <Button Text="EE" Clicked="ChangeLanguageToEt" BackgroundColor="#33FFFFFF" TextColor="White" CornerRadius="20"/>
             <Button Text="EN" Clicked="ChangeLanguageToEn" BackgroundColor="#33FFFFFF" TextColor="White" CornerRadius="20"/>

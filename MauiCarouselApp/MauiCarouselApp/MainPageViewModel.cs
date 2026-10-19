@@ -76,7 +76,7 @@ public class MainPageViewModel : INotifyPropertyChanged
 
     private void StartAutoScroll()
     {
-        // Taimer vahetab kaarti iga 4 sekundi (4000 ms) järel
+        // Taimer vahetab kaarti iga 4 sekundi järel
         Application.Current.Dispatcher.StartTimer(TimeSpan.FromSeconds(4), () =>
         {
             if (Languages.Count == 0) return false;
