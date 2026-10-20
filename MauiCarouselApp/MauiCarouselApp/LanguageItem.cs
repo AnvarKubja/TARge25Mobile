@@ -9,7 +9,7 @@ public class LanguageItem
     public int YearCreated { get; set; }
     public string HelloWorldCode { get; set; }
 
-    // Dünaamiline omadus, mis tagastab kirjelduse vastavalt valitud kultuurile
+    // Dünaamiline omadus, mis tagastab kirjelduse vastavalt valitud keelele
     public string LocalizedDescription =>
         System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "et"
             ? DescriptionEt

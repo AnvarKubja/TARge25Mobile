@@ -17,8 +17,8 @@
 
         <!-- Keele vahetamise nupud-->
         <HorizontalStackLayout Grid.Row="0" HorizontalOptions="End" Spacing="10" Margin="0,0,0,10">
-            <Button Text="EE" Clicked="ChangeLanguageToEt" BackgroundColor="#33FFFFFF" TextColor="White" CornerRadius="20"/>
-            <Button Text="EN" Clicked="ChangeLanguageToEn" BackgroundColor="#33FFFFFF" TextColor="White" CornerRadius="20"/>
+            <Button Text="EE" Clicked="ChangeLanguageToEt" BackgroundColor="Blue" TextColor="White" CornerRadius="20"/>
+            <Button Text="EN" Clicked="ChangeLanguageToEn" BackgroundColor="Red" TextColor="White" CornerRadius="20"/>
         </HorizontalStackLayout>
 
         <!-- CarouselView galeriiks -->
@@ -32,8 +32,9 @@
                     <ContentView Padding="10">
                         <!-- Kaardi disain koos klikitavusega -->
                         <Border StrokeShape="RoundRectangle 20" 
-                                BackgroundColor="#CCFFFFFF" 
-                                StrokeThickness="0">
+                                BackgroundColor="#CCFFFF" 
+                                StrokeThickness="2"
+                                Stroke="Black">
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="OnCardTapped" CommandParameter="{Binding .}"/>
                             </Border.GestureRecognizers>
