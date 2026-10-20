@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Memo.MainPage"
+             Title="Memo">
+
+    <!-- Vaikeväärtused; Theme.Apply kirjutab need üle -->
+    <ContentPage.Resources>
+        <Color x:Key="TextColor">#222222</Color>
+        <Color x:Key="CardColor">#BBDEFB</Color>
+        <x:String x:Key="FontName">OpenSansRegular</x:String>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Padding="15" Spacing="10">
+
+        <Label Text="Memo mäng"
+               FontSize="30"
+               HorizontalOptions="Center"
+               TextColor="{DynamicResource TextColor}"
+               FontFamily="{DynamicResource FontName}" />
+
+        <Entry x:Name="NameEntry"
+               Placeholder="Sinu nimi"
+               TextColor="{DynamicResource TextColor}"
+               PlaceholderColor="Gray"
+               FontFamily="{DynamicResource FontName}" />
+
+        <Picker x:Name="ThemePicker"
+                Title="Vali teema"
+                TextColor="{DynamicResource TextColor}"
+                TitleColor="Gray"
+                FontFamily="{DynamicResource FontName}"
+                SelectedIndexChanged="OnThemeChanged" />
+
+        <Button Text="Uus mäng"
+                Clicked="OnNewGameClicked"
+                BackgroundColor="{DynamicResource CardColor}"
+                TextColor="{DynamicResource TextColor}"
+                FontFamily="{DynamicResource FontName}" />
+
+        <Label x:Name="InfoLabel"
+               HorizontalOptions="Center"
+               TextColor="{DynamicResource TextColor}"
+               FontFamily="{DynamicResource FontName}" />
+
+        <!-- Kaardid lisatakse siia C# koodis -->
+        <Grid x:Name="BoardGrid"
+              RowSpacing="4"
+              ColumnSpacing="4"
+              HeightRequest="400" />
+    </VerticalStackLayout>
+</ContentPage>
