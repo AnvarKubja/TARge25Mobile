@@ -84,7 +84,11 @@ public partial class MainPage : ContentPage
 
     private async void OnCardFlipped(Card card)
     {
-        await FlipAnimation(card.Button, card.Symbol);
+        await card.Button.RotateYTo(90, 120);
+        card.Button.Text = "";
+        card.Button.BackgroundColor = Color.FromArgb(card.Symbol);
+        await card.Button.RotateYTo(0, 120);
+
         UpdateInfo();
     }
 
@@ -102,6 +106,7 @@ public partial class MainPage : ContentPage
             FlipAnimation(b.Button, "?"));
     }
 
+
     // Kaardi pööramine: pöörame 90 kraadi, vahetame teksti, pöörame tagasi
     private async Task FlipAnimation(Button button, string newText)
     {
@@ -114,7 +119,7 @@ public partial class MainPage : ContentPage
     {
         _timer?.Stop();
         UpdateInfo();
-
+        
         bool isRecord = _game!.Player.SaveIfBest();
         string message = $"Käike: {_game.Player.Moves}\nAeg: {_game.Elapsed:mm\\:ss}";
         if (isRecord)
