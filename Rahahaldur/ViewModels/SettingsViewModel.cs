@@ -14,22 +14,26 @@ public class SettingsViewModel : BaseViewModel
     private bool _isDark;
     private bool _soundOn;
 
-    public List<string> Languages { get; } = new() { "Eesti", "English" };
+    public List<string> Languages { get; } = new List<string> { "Eesti", "English" };
 
+    // 0 = eesti, 1 = inglise
     public int LanguageIndex
     {
         get => _languageIndex;
         set
         {
-            if (value < 0) // Picker võib hetkeks anda -1
+            if (value < 0 || value == _languageIndex)
                 return;
 
-            if (SetProperty(ref _languageIndex, value))
-            {
-                var code = value == 1 ? "en" : "et";
-                _settings.Language = code;
-                _loc.SetLanguage(code); // keel muutub kohe, restarti pole vaja
-            }
+            _languageIndex = value;
+            OnPropertyChanged(nameof(LanguageIndex));
+
+            string code = "et";
+            if (value == 1)
+                code = "en";
+
+            _settings.Language = code;   // salvesta
+            _loc.SetLanguage(code);      // muuda keel kohe
         }
     }
 
@@ -38,8 +42,16 @@ public class SettingsViewModel : BaseViewModel
         get => _isDark;
         set
         {
-            if (SetProperty(ref _isDark, value))
-                _theme.Apply(value ? "Dark" : "Light");
+            if (value == _isDark)
+                return;
+
+            _isDark = value;
+            OnPropertyChanged(nameof(IsDark));
+
+            if (value)
+                _theme.Apply("Dark");
+            else
+                _theme.Apply("Light");
         }
     }
 
@@ -48,14 +60,17 @@ public class SettingsViewModel : BaseViewModel
         get => _soundOn;
         set
         {
-            if (SetProperty(ref _soundOn, value))
-            {
-                _settings.SoundOn = value;
-                if (value)
-                    _ = _audio.StartMusicAsync();
-                else
-                    _audio.StopMusic();
-            }
+            if (value == _soundOn)
+                return;
+
+            _soundOn = value;
+            OnPropertyChanged(nameof(SoundOn));
+
+            _settings.SoundOn = value;
+            if (value)
+                _audio.StartMusicAsync();
+            else
+                _audio.StopMusic();
         }
     }
 
@@ -67,7 +82,11 @@ public class SettingsViewModel : BaseViewModel
         _audio = audio;
 
         // Taasta salvestatud väärtused
-        _languageIndex = settings.Language == "en" ? 1 : 0;
+        if (settings.Language == "en")
+            _languageIndex = 1;
+        else
+            _languageIndex = 0;
+
         _isDark = settings.Theme == "Dark";
         _soundOn = settings.SoundOn;
     }

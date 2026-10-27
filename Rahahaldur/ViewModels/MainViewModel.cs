@@ -13,35 +13,53 @@ public class MainViewModel : BaseViewModel
     private readonly AudioService _audio;
     private readonly LocalizationService _loc;
 
-    private ObservableCollection<MoneyEntry> _entries = new();
-    private string _incomeText = MoneyEntry.Format(0);
-    private string _expenseText = MoneyEntry.Format(0);
-    private string _balanceText = MoneyEntry.Format(0);
+    private ObservableCollection<MoneyEntry> _entries = new ObservableCollection<MoneyEntry>();
+    private string _incomeText = "0.00 €";
+    private string _expenseText = "0.00 €";
+    private string _balanceText = "0.00 €";
 
+    // Nimekiri, mida ekraan näitab
     public ObservableCollection<MoneyEntry> Entries
     {
         get => _entries;
-        set => SetProperty(ref _entries, value);
+        set
+        {
+            _entries = value;
+            OnPropertyChanged(nameof(Entries));
+        }
     }
 
     public string IncomeText
     {
         get => _incomeText;
-        set => SetProperty(ref _incomeText, value);
+        set
+        {
+            _incomeText = value;
+            OnPropertyChanged(nameof(IncomeText));
+        }
     }
 
     public string ExpenseText
     {
         get => _expenseText;
-        set => SetProperty(ref _expenseText, value);
+        set
+        {
+            _expenseText = value;
+            OnPropertyChanged(nameof(ExpenseText));
+        }
     }
 
     public string BalanceText
     {
         get => _balanceText;
-        set => SetProperty(ref _balanceText, value);
+        set
+        {
+            _balanceText = value;
+            OnPropertyChanged(nameof(BalanceText));
+        }
     }
 
+    // Käsud (nupuvajutused), mida ekraan kasutab
     public ICommand AddCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
@@ -53,43 +71,64 @@ public class MainViewModel : BaseViewModel
         _audio = audio;
         _loc = loc;
 
-        AddCommand = new Command(async () => await _nav.GoToAsync("EditPage"));
-
-        EditCommand = new Command<MoneyEntry>(async entry =>
-        {
-            var parameters = new ShellNavigationQueryParameters { { "Item", entry } };
-            await _nav.GoToAsync("EditPage", parameters);
-        });
-
-        DeleteCommand = new Command<MoneyEntry>(async entry =>
-        {
-            bool yes = await _nav.ConfirmAsync(_loc["DeleteTitle"], _loc["DeleteQuestion"], _loc["Yes"], _loc["No"]);
-            if (!yes)
-                return;
-
-            await _db.DeleteAsync(entry);
-            await _audio.PlayEffectAsync("delete.wav");
-            await LoadAsync();
-        });
+        AddCommand = new Command(AddEntry);
+        EditCommand = new Command<MoneyEntry>(EditEntry);
+        DeleteCommand = new Command<MoneyEntry>(DeleteEntry);
 
         // Kui keel muutub, laeme nimekirja uuesti (kategooriate tõlked uuenevad)
-        _loc.LanguageChanged += async () => await LoadAsync();
+        _loc.LanguageChanged += OnLanguageChanged;
     }
 
+    private async void AddEntry()
+    {
+        AppState.EntryToEdit = null; // null = uus kirje
+        await _nav.GoToAsync("EditPage");
+    }
+
+    private async void EditEntry(MoneyEntry entry)
+    {
+        AppState.EntryToEdit = entry;
+        await _nav.GoToAsync("EditPage");
+    }
+
+    private async void DeleteEntry(MoneyEntry entry)
+    {
+        bool yes = await _nav.ConfirmAsync(_loc["DeleteTitle"], _loc["DeleteQuestion"], _loc["Yes"], _loc["No"]);
+        if (!yes)
+            return;
+
+        await _db.DeleteAsync(entry);
+        await _audio.PlayEffectAsync("delete.wav");
+        await LoadAsync();
+    }
+
+    private async void OnLanguageChanged()
+    {
+        await LoadAsync();
+    }
+
+    // Loeb andmebaasist kõik kirjed ja arvutab summad
     public async Task LoadAsync()
     {
-        var list = await _db.GetAllAsync();
+        List<MoneyEntry> list = await _db.GetAllAsync();
 
-        foreach (var entry in list)
+        double income = 0;
+        double expense = 0;
+
+        foreach (MoneyEntry entry in list)
+        {
             entry.CategoryText = _loc["Cat_" + entry.Category];
+
+            if (entry.IsIncome)
+                income = income + entry.Amount;
+            else
+                expense = expense + entry.Amount;
+        }
 
         Entries = new ObservableCollection<MoneyEntry>(list);
 
-        double income = list.Where(e => e.IsIncome).Sum(e => e.Amount);
-        double expense = list.Where(e => !e.IsIncome).Sum(e => e.Amount);
-
         IncomeText = MoneyEntry.Format(income);
         ExpenseText = MoneyEntry.Format(expense);
-        BalanceText = MoneyEntry.Format(income - expense);
+        BalanceText = MoneyEntry.Format(income - expense); // saldo = tulud - kulud
     }
 }

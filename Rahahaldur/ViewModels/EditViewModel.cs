@@ -6,15 +6,14 @@ using RahaHaldur.Services;
 namespace RahaHaldur.ViewModels;
 
 // Lisamise / muutmise lehe loogika.
-// IQueryAttributable: nii saame ülevaatelehelt kaasa antud kirje.
-public class EditViewModel : BaseViewModel, IQueryAttributable
+public class EditViewModel : BaseViewModel
 {
     private readonly DatabaseService _db;
     private readonly NavigationService _nav;
     private readonly AudioService _audio;
     private readonly LocalizationService _loc;
 
-    private MoneyEntry _entry = new();
+    private MoneyEntry _entry;      // kirje, mida lisame või muudame
     private string _pageTitle;
     private string _title = "";
     private string _amountText = "";
@@ -24,19 +23,31 @@ public class EditViewModel : BaseViewModel, IQueryAttributable
     public string PageTitle
     {
         get => _pageTitle;
-        set => SetProperty(ref _pageTitle, value);
+        set
+        {
+            _pageTitle = value;
+            OnPropertyChanged(nameof(PageTitle));
+        }
     }
 
     public string Title
     {
         get => _title;
-        set => SetProperty(ref _title, value);
+        set
+        {
+            _title = value;
+            OnPropertyChanged(nameof(Title));
+        }
     }
 
     public string AmountText
     {
         get => _amountText;
-        set => SetProperty(ref _amountText, value);
+        set
+        {
+            _amountText = value;
+            OnPropertyChanged(nameof(AmountText));
+        }
     }
 
     public bool IsIncome
@@ -44,13 +55,17 @@ public class EditViewModel : BaseViewModel, IQueryAttributable
         get => _isIncome;
         set
         {
-            if (SetProperty(ref _isIncome, value))
-                OnPropertyChanged(nameof(IsExpense));
+            _isIncome = value;
+            OnPropertyChanged(nameof(IsIncome));
+            OnPropertyChanged(nameof(IsExpense)); // kategooria valik näitab/peidab end
         }
     }
 
     // Kategooria valik näidatakse ainult kulude puhul
-    public bool IsExpense => !IsIncome;
+    public bool IsExpense
+    {
+        get => !_isIncome;
+    }
 
     public int CategoryIndex
     {
@@ -58,10 +73,14 @@ public class EditViewModel : BaseViewModel, IQueryAttributable
         set
         {
             if (value >= 0) // Picker võib hetkeks anda -1
-                SetProperty(ref _categoryIndex, value);
+            {
+                _categoryIndex = value;
+                OnPropertyChanged(nameof(CategoryIndex));
+            }
         }
     }
 
+    // Kategooriate nimed valikuloendi jaoks (tõlgitud)
     public List<string> CategoryNames { get; }
 
     public ICommand SaveCommand { get; }
@@ -74,34 +93,47 @@ public class EditViewModel : BaseViewModel, IQueryAttributable
         _audio = audio;
         _loc = loc;
 
-        _pageTitle = _loc["AddEntry"];
-        CategoryNames = Categories.All.Select(c => _loc["Cat_" + c]).ToList();
+        CategoryNames = new List<string>();
+        foreach (string category in Categories.All)
+            CategoryNames.Add(_loc["Cat_" + category]);
 
-        SaveCommand = new Command(async () => await SaveAsync());
-        CancelCommand = new Command(async () => await _nav.GoBackAsync());
-    }
-
-    // Shell kutsub seda, kui lehele anti kaasa kirje (muutmine)
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        if (query.TryGetValue("Item", out var value) && value is MoneyEntry entry)
+        if (AppState.EntryToEdit == null)
         {
-            _entry = entry;
-            PageTitle = _loc["EditEntry"];
-            Title = entry.Title;
-            AmountText = entry.Amount.ToString("0.##", CultureInfo.InvariantCulture);
-            IsIncome = entry.IsIncome;
-            CategoryIndex = Math.Max(0, Array.IndexOf(Categories.All, entry.Category));
+            // Uus kirje
+            _entry = new MoneyEntry();
+            _pageTitle = _loc["AddEntry"];
         }
+        else
+        {
+            // Olemasoleva muutmine: täidame väljad kirje andmetega
+            _entry = AppState.EntryToEdit;
+            _pageTitle = _loc["EditEntry"];
+            _title = _entry.Title;
+            _amountText = _entry.Amount.ToString("0.##", CultureInfo.InvariantCulture);
+            _isIncome = _entry.IsIncome;
+
+            int index = Array.IndexOf(Categories.All, _entry.Category);
+            if (index >= 0)
+                _categoryIndex = index;
+        }
+
+        SaveCommand = new Command(Save);
+        CancelCommand = new Command(Cancel);
     }
 
-    private async Task SaveAsync()
+    private async void Cancel()
     {
-        var text = AmountText.Replace(',', '.'); // lubame nii koma kui punkti
+        await _nav.GoBackAsync();
+    }
 
-        if (string.IsNullOrWhiteSpace(Title) ||
-            !double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var amount) ||
-            amount <= 0)
+    private async void Save()
+    {
+        // Komakoht tehakse punktiks, et "12,5" oleks sama mis "12.5"
+        string text = AmountText.Replace(',', '.');
+        double amount;
+        bool amountOk = double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out amount);
+
+        if (string.IsNullOrWhiteSpace(Title) || !amountOk || amount <= 0)
         {
             await _nav.AlertAsync(_loc["ErrorTitle"], _loc["ErrorMessage"], _loc["Ok"]);
             return;
@@ -110,7 +142,11 @@ public class EditViewModel : BaseViewModel, IQueryAttributable
         _entry.Title = Title.Trim();
         _entry.Amount = amount;
         _entry.IsIncome = IsIncome;
-        _entry.Category = IsIncome ? Categories.Income : Categories.All[CategoryIndex];
+
+        if (IsIncome)
+            _entry.Category = Categories.Income;
+        else
+            _entry.Category = Categories.All[CategoryIndex];
 
         await _db.SaveAsync(_entry);
         await _audio.PlayEffectAsync("coin.wav");

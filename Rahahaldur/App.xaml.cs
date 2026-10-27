@@ -16,13 +16,18 @@ public partial class App : Application
         theme.ApplySaved();
     }
 
-    protected override Window CreateWindow(IActivationState? activationState)
+    protected override Window CreateWindow(IActivationState activationState)
     {
         var window = new Window(new AppShell());
 
-        // Taustamuusika algab, kui aken on loodud (kui heli on sisse lülitatud)
-        window.Created += (s, e) => _ = _audio.StartMusicAsync();
+        // Taustamuusika algab, kui aken on loodud
+        window.Created += OnWindowCreated;
 
         return window;
+    }
+
+    private async void OnWindowCreated(object sender, EventArgs e)
+    {
+        await _audio.StartMusicAsync();
     }
 }

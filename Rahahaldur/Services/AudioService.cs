@@ -7,7 +7,7 @@ public class AudioService
 {
     private readonly IAudioManager _audioManager;
     private readonly SettingsService _settings;
-    private IAudioPlayer? _music;
+    private IAudioPlayer _music;
 
     public AudioService(IAudioManager audioManager, SettingsService settings)
     {
@@ -15,7 +15,7 @@ public class AudioService
         _settings = settings;
     }
 
-    // Lühike heliefekt, nt "coin.wav"
+    // Lühike heliefekt, nt "coin.wav" (fail on kaustas Resources/Raw)
     public async Task PlayEffectAsync(string fileName)
     {
         if (!_settings.SoundOn)
@@ -25,19 +25,16 @@ public class AudioService
         {
             var stream = await FileSystem.OpenAppPackageFileAsync(fileName);
             var player = _audioManager.CreatePlayer(stream);
-            player.PlaybackEnded += (s, e) =>
-            {
-                player.Dispose();
-                stream.Dispose();
-            };
             player.Play();
         }
         catch (Exception ex)
         {
+            // Heli viga ei tohi rakendust kinni panna
             System.Diagnostics.Debug.WriteLine("Heli viga: " + ex.Message);
         }
     }
 
+    // Käivitab taustamuusika (kordub lõputult)
     public async Task StartMusicAsync()
     {
         if (!_settings.SoundOn)
@@ -52,6 +49,7 @@ public class AudioService
                 _music.Loop = true;
                 _music.Volume = 0.4;
             }
+
             _music.Play();
         }
         catch (Exception ex)
@@ -60,8 +58,10 @@ public class AudioService
         }
     }
 
+    // Peatab muusika (Play jätkab samast kohast)
     public void StopMusic()
     {
-        _music?.Pause();
+        if (_music != null)
+            _music.Pause();
     }
 }
