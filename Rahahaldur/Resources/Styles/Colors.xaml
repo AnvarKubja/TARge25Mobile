@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Heleda ja tumeda teema värvid. Stiilid valivad neist AppThemeBinding'uga. -->
+    <Color x:Key="Primary">#3B6FE0</Color>
+    <Color x:Key="IncomeColor">#2E9E5B</Color>
+    <Color x:Key="ExpenseColor">#D64545</Color>
+
+    <Color x:Key="BgLight">#F4F6FA</Color>
+    <Color x:Key="BgDark">#14161C</Color>
+
+    <Color x:Key="CardLight">#FFFFFF</Color>
+    <Color x:Key="CardDark">#1F232C</Color>
+
+    <Color x:Key="TextLight">#1B1F27</Color>
+    <Color x:Key="TextDark">#F2F4F8</Color>
+
+    <Color x:Key="MutedLight">#6B7280</Color>
+    <Color x:Key="MutedDark">#9AA3B2</Color>
+
+</ResourceDictionary>

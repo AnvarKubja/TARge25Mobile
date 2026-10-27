@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="RahaHaldur.Views.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:RahaHaldur.ViewModels"
+             xmlns:loc="clr-namespace:RahaHaldur.Resources.Localization"
+             Title="{loc:Translate AppName}">
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="16" RowSpacing="12">
+
+        <!-- Kokkuvõte -->
+        <Border Grid.Row="0" StyleClass="Card">
+            <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto">
+                <Label Grid.Column="0" Text="{loc:Translate Income}" StyleClass="Muted" />
+                <Label Grid.Column="1" Text="{loc:Translate Expense}" StyleClass="Muted" />
+                <Label Grid.Column="2" Text="{loc:Translate Balance}" StyleClass="Muted" />
+
+                <Label Grid.Row="1" Grid.Column="0" Text="{Binding IncomeText}"
+                       TextColor="{StaticResource IncomeColor}" StyleClass="Value" />
+                <Label Grid.Row="1" Grid.Column="1" Text="{Binding ExpenseText}"
+                       TextColor="{StaticResource ExpenseColor}" StyleClass="Value" />
+                <Label Grid.Row="1" Grid.Column="2" Text="{Binding BalanceText}" StyleClass="Value" />
+            </Grid>
+        </Border>
+
+        <!-- Kirjete nimekiri -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Entries}">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="8" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.EmptyView>
+                <Label Text="{loc:Translate Empty}" StyleClass="Muted"
+                       HorizontalOptions="Center" VerticalOptions="Center" />
+            </CollectionView.EmptyView>
+
+            <!-- DataTemplate: kuidas üht kirjet kuvatakse -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border StyleClass="Card">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=EditCommand}"
+                                CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="12">
+                            <Image Grid.Column="0" Source="expense.png" WidthRequest="32" HeightRequest="32">
+                                <Image.Triggers>
+                                    <DataTrigger TargetType="Image" Binding="{Binding IsIncome}" Value="True">
+                                        <Setter Property="Source" Value="income.png" />
+                                    </DataTrigger>
+                                </Image.Triggers>
+                            </Image>
+
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label Text="{Binding Title}" StyleClass="Title" />
+                                <HorizontalStackLayout Spacing="8">
+                                    <Label Text="{Binding CategoryText}" StyleClass="Muted" />
+                                    <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}" StyleClass="Muted" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+
+                            <Label Grid.Column="2" Text="{Binding AmountText}" StyleClass="Value"
+                                   TextColor="{StaticResource ExpenseColor}" VerticalOptions="Center">
+                                <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsIncome}" Value="True">
+                                        <Setter Property="TextColor" Value="{StaticResource IncomeColor}" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+
+                            <Button Grid.Column="3" Text="✕" StyleClass="Danger"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=DeleteCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Lisa nupp -->
+        <Button Grid.Row="2" Text="{loc:Translate AddEntry}" StyleClass="Primary"
+                Command="{Binding AddCommand}" />
+    </Grid>
+</ContentPage>

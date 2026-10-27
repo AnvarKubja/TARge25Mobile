@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppName" xml:space="preserve"><value>RahaHaldur</value></data>
+  <data name="Overview" xml:space="preserve"><value>Ülevaade</value></data>
+  <data name="Sort" xml:space="preserve"><value>Sorteeri</value></data>
+  <data name="Settings" xml:space="preserve"><value>Seaded</value></data>
+  <data name="Income" xml:space="preserve"><value>Tulud</value></data>
+  <data name="Expense" xml:space="preserve"><value>Kulud</value></data>
+  <data name="Balance" xml:space="preserve"><value>Saldo</value></data>
+  <data name="Empty" xml:space="preserve"><value>Kirjeid veel pole. Lisa esimene!</value></data>
+  <data name="AddEntry" xml:space="preserve"><value>Lisa kirje</value></data>
+  <data name="EditEntry" xml:space="preserve"><value>Muuda kirjet</value></data>
+  <data name="TitleLabel" xml:space="preserve"><value>Pealkiri</value></data>
+  <data name="TitleHint" xml:space="preserve"><value>nt Toidukaubad</value></data>
+  <data name="Amount" xml:space="preserve"><value>Summa (€)</value></data>
+  <data name="AmountHint" xml:space="preserve"><value>0.00</value></data>
+  <data name="IsIncome" xml:space="preserve"><value>See on sissetulek</value></data>
+  <data name="Category" xml:space="preserve"><value>Kategooria</value></data>
+  <data name="Save" xml:space="preserve"><value>Salvesta</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Tühista</value></data>
+  <data name="DeleteTitle" xml:space="preserve"><value>Kustuta kirje</value></data>
+  <data name="DeleteQuestion" xml:space="preserve"><value>Kas soovid selle kirje tõesti kustutada?</value></data>
+  <data name="Yes" xml:space="preserve"><value>Jah</value></data>
+  <data name="No" xml:space="preserve"><value>Ei</value></data>
+  <data name="Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="ErrorTitle" xml:space="preserve"><value>Andmed puudu</value></data>
+  <data name="ErrorMessage" xml:space="preserve"><value>Sisesta pealkiri ja summa, mis on suurem kui 0.</value></data>
+  <data name="Language" xml:space="preserve"><value>Keel</value></data>
+  <data name="DarkMode" xml:space="preserve"><value>Tume teema</value></data>
+  <data name="Sound" xml:space="preserve"><value>Heli ja muusika</value></data>
+  <data name="SortHint" xml:space="preserve"><value>Hoia kulu all ja lohista see kategooria peale.</value></data>
+  <data name="Cat_Food" xml:space="preserve"><value>Toit</value></data>
+  <data name="Cat_Transport" xml:space="preserve"><value>Transport</value></data>
+  <data name="Cat_Fun" xml:space="preserve"><value>Meelelahutus</value></data>
+  <data name="Cat_Other" xml:space="preserve"><value>Muu</value></data>
+  <data name="Cat_Income" xml:space="preserve"><value>Sissetulek</value></data>
+</root>

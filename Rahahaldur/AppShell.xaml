@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell x:Class="RahaHaldur.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:RahaHaldur.Views"
+       xmlns:loc="clr-namespace:RahaHaldur.Resources.Localization"
+       Shell.BackgroundColor="{StaticResource Primary}"
+       Shell.ForegroundColor="White"
+       Shell.TitleColor="White"
+       Shell.TabBarBackgroundColor="{AppThemeBinding Light={StaticResource CardLight}, Dark={StaticResource CardDark}}"
+       Shell.TabBarForegroundColor="{StaticResource Primary}"
+       Shell.TabBarTitleColor="{StaticResource Primary}"
+       Shell.TabBarUnselectedColor="{AppThemeBinding Light={StaticResource MutedLight}, Dark={StaticResource MutedDark}}">
+
+    <TabBar>
+        <ShellContent Title="{loc:Translate Overview}"
+                      Icon="tab_home.png"
+                      ContentTemplate="{DataTemplate views:MainPage}"
+                      Route="MainPage" />
+        <ShellContent Title="{loc:Translate Sort}"
+                      Icon="tab_sort.png"
+                      ContentTemplate="{DataTemplate views:SortPage}"
+                      Route="SortPage" />
+        <ShellContent Title="{loc:Translate Settings}"
+                      Icon="tab_settings.png"
+                      ContentTemplate="{DataTemplate views:SettingsPage}"
+                      Route="SettingsPage" />
+    </TabBar>
+
+</Shell>

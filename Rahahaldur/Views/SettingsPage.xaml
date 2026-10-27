@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="RahaHaldur.Views.SettingsPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:RahaHaldur.Resources.Localization"
+             Title="{loc:Translate Settings}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="14">
+
+            <!-- Keel -->
+            <Border StyleClass="Card">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="{loc:Translate Language}" StyleClass="Title" />
+                    <Picker ItemsSource="{Binding Languages}" SelectedIndex="{Binding LanguageIndex}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Tume teema -->
+            <Border StyleClass="Card">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{loc:Translate DarkMode}" StyleClass="Title" VerticalOptions="Center" />
+                    <Switch Grid.Column="1" IsToggled="{Binding IsDark}" />
+                </Grid>
+            </Border>
+
+            <!-- Heli -->
+            <Border StyleClass="Card">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{loc:Translate Sound}" StyleClass="Title" VerticalOptions="Center" />
+                    <Switch Grid.Column="1" IsToggled="{Binding SoundOn}" />
+                </Grid>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
