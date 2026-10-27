@@ -51,4 +51,4 @@ Sorteerimise lehel hoia sõrme (emulaatoris hiirt) kulu peal ja lohista see ühe
 
 ## Heli
 
-Helid (`coin.wav`, `click.wav`, `delete.wav`, `music.wav`) on loodud programmiliselt, seega pole autoriõiguse probleeme.
+Helid (`coin.wav`, `click.wav`, `delete.wav`, `music.wav`) on loodud programmiliselt.

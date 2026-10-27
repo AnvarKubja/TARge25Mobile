@@ -39,8 +39,6 @@ public class SortViewModel : BaseViewModel
 
         DragStartCommand = new Command<MoneyEntry>(DragStart);
         DropCommand = new Command<string>(Drop);
-
-        _loc.LanguageChanged += OnLanguageChanged;
     }
 
     // Jätame lohistatava kulu meelde
@@ -60,11 +58,6 @@ public class SortViewModel : BaseViewModel
         _dragged = null;
 
         await _audio.PlayEffectAsync("click.wav");
-        await LoadAsync();
-    }
-
-    private async void OnLanguageChanged()
-    {
         await LoadAsync();
     }
 

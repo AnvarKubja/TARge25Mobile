@@ -74,9 +74,6 @@ public class MainViewModel : BaseViewModel
         AddCommand = new Command(AddEntry);
         EditCommand = new Command<MoneyEntry>(EditEntry);
         DeleteCommand = new Command<MoneyEntry>(DeleteEntry);
-
-        // Kui keel muutub, laeme nimekirja uuesti (kategooriate tõlked uuenevad)
-        _loc.LanguageChanged += OnLanguageChanged;
     }
 
     private async void AddEntry()
@@ -99,11 +96,6 @@ public class MainViewModel : BaseViewModel
 
         await _db.DeleteAsync(entry);
         await _audio.PlayEffectAsync("delete.wav");
-        await LoadAsync();
-    }
-
-    private async void OnLanguageChanged()
-    {
         await LoadAsync();
     }
 

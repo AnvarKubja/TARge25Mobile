@@ -17,7 +17,6 @@ public class LocalizationService : INotifyPropertyChanged
     private CultureInfo _culture = new CultureInfo("et");
 
     public event PropertyChangedEventHandler PropertyChanged;
-    public event Action LanguageChanged;
 
     // Kasutus: loc["Save"] annab "Salvesta" või "Save"
     public string this[string key]
@@ -37,6 +36,5 @@ public class LocalizationService : INotifyPropertyChanged
 
         // Anna kõigile tekstidele teada, et nad uuendaksid end
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
-        LanguageChanged?.Invoke();
     }
 }
